@@ -11,15 +11,72 @@ string playerFile = "player.dat";
 string teamFile = "team.dat";
 string requestFile = "request.dat";
 
-
-
 using namespace std;
+
+
 //function for initialize files of each class
 void initFiles(vector <LeagueManager>&, vector <TeamManager>&, vector<Coach>&,
 	vector<Player>&, vector<Team>&, vector<Request>&);
 
+//check username before submit not be duplicated
+bool isUserNameExist(string,vector<TeamManager>&);
+
+//sign up team manager
+void signUpTeamManager(vector<TeamManager>& teamManagers)
+{
+	cin.clear();
+	cin.ignore();
+
+	string firstName,lastName,userName,password;
+
+	cout << "enter first name:\t";
+	getline(cin, firstName);
+
+	cout << "enter last name:\t";
+	getline(cin, lastName);
+	//check user name not be duplicated
+	while (true)
+	{
+		cout << "enter user name:\t";
+		getline(cin, userName);
+		if (!isUserNameExist(userName, teamManagers))
+			break;
+		else
+			cout << "plz select another one it`s exist!!\n";
+	}
+	cout << "plz enter password:\t";
+	getline(cin,password);
+
+	TeamManager tm(userName, password, firstName, lastName);
+	teamManagers.push_back(tm);
+	ofstream file(teamManagerFile, ios::binary | ios::app);
+	file.write(reinterpret_cast<const char*>(&tm), sizeof(TeamManager));
+	file.close();
+}
+
+//function for show team manager menu
+void teamManagerMenu(vector<TeamManager>& teamManagers)
+{
+	cout << "1-logIn\n2-i`m new(sign up)\nenter option:\t";
+	int opt;
+	cin >> opt;
+	switch (opt)
+	{
+	case 1:
+		//login and do activity
+		break;
+	case 2:
+		signUpTeamManager(teamManagers);
+		break;
+	default:
+		break;
+	}
+
+}
 int main()
 {
+	TeamManager tm;
+	/*
 	//vectors
 	vector <LeagueManager> leagueManagers;
 	vector <TeamManager>teamManagers;
@@ -29,12 +86,32 @@ int main()
 	vector<Request>requestes;
 
 	initFiles(leagueManagers, teamManagers, coaches, players, teams, requestes);
-
-	/*while (true)
+	
+	while (true)
 	{
-
-
-	}*/
+		cout << "1-teamManager menu\n2-player menu\n3-Coach menu\n4-leagueManager\n5-exit\nenter option:\t";
+		int opt;
+		cin >> opt;
+		switch (opt)
+		{
+		case 1:
+			teamManagerMenu(teamManagers);
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		default:
+			break;
+		}
+		if (opt == 5)
+			break;
+	}
+	*/
 }
 void initFiles(vector <LeagueManager>& leagueManagers, vector <TeamManager>& teamManagers , vector<Coach>& coaches,
 	vector<Player>& players, vector<Team>& teams, vector<Request>& requestes)
@@ -43,6 +120,7 @@ void initFiles(vector <LeagueManager>& leagueManagers, vector <TeamManager>& tea
 	ifstream leagueManager(leagueManagerFile,ios::binary);
 	if(leagueManager)
 	{
+		
 		LeagueManager lm;
 		while (!leagueManager.eof())
 		{
@@ -58,16 +136,18 @@ void initFiles(vector <LeagueManager>& leagueManagers, vector <TeamManager>& tea
 		newFile.close();
 	}
 
-	//team manager file initialize
 	ifstream teamManager(teamManagerFile, ios::binary);
 	if (teamManager)
 	{
 		TeamManager tm;
+
 		while (!teamManager.eof())
 		{
+			
 			teamManager.read(reinterpret_cast<char*>(&tm), sizeof(TeamManager));
 			teamManagers.push_back(tm);
 		}
+		
 		teamManager.close();
 	}
 	else
@@ -95,6 +175,7 @@ void initFiles(vector <LeagueManager>& leagueManagers, vector <TeamManager>& tea
 		ofstream newFile(coachFile, ios::binary);
 		newFile.close();
 	}
+	cout << "2";
 
 	//player file initialize
 	ifstream player(playerFile, ios::binary);
@@ -114,6 +195,7 @@ void initFiles(vector <LeagueManager>& leagueManagers, vector <TeamManager>& tea
 		ofstream newFile(playerFile, ios::binary);
 		newFile.close();
 	}
+	cout << "3";
 
 	//teams file initialize
 	ifstream team(teamFile, ios::binary);
@@ -134,6 +216,8 @@ void initFiles(vector <LeagueManager>& leagueManagers, vector <TeamManager>& tea
 		newFile.close();
 	}
 
+	cout << "4";
+
 	//request file initialize
 	ifstream request(requestFile, ios::binary);
 	if (request)
@@ -152,5 +236,14 @@ void initFiles(vector <LeagueManager>& leagueManagers, vector <TeamManager>& tea
 		ofstream newFile(requestFile, ios::binary);
 		newFile.close();
 	}
+	cout << "5";
 
+}
+
+bool isUserNameExist(string userName, vector<TeamManager>& teamManagers)
+{
+	for (int i = 0; i < teamManagers.size(); i++)
+		if (teamManagers[i].getUsername() == userName)
+			return true;
+	return false;
 }

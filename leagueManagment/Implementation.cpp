@@ -81,7 +81,6 @@ string Role::getRole()
 Player::Player()
 {
 	requestCounter = 0;
-	requestBox = new Request[30];
 }
 
 Player::Player(string username, string password, string firstname, string lastname,
@@ -95,7 +94,6 @@ Player::Player(string username, string password, string firstname, string lastna
 	this->setSalary(salary);
 	this->setStock(stock);
 
-	requestBox = new Request[30];
 }
 
 void Player::setRole(string data)

@@ -55,6 +55,7 @@ public:
 //////////// Player class ////////////
 
 class Request;
+
 class Player :public User
 {
 private:
@@ -62,7 +63,7 @@ private:
 	double salary;
 	double stock;
 	int goals;
-	Request* requestBox;
+	Request requestBox[30];
 	int requestCounter;
 public:
 	Player();
