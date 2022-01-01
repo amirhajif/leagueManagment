@@ -1,5 +1,5 @@
 #include "Classes.h"
-
+#include <iostream>
 ////// User class functions //////
 
 User::User(string username, string password, string firstname, string lastname)
@@ -256,7 +256,7 @@ Team Coach::getTeam()
 
 ////// Request class functions //////
 
-Request::Request(Team sender, string text, Player player, string status)
+Request::Request(Team* sender, string text, Player* player, string status)
 {
 	this->setRequstedPlayer(player);
 	this->setSatus(status);
@@ -264,14 +264,14 @@ Request::Request(Team sender, string text, Player player, string status)
 	this->setText(text);
 }
 
-void Request::setRequstedPlayer(Player data)
+void Request::setRequstedPlayer(Player* data)
 {
 	this->requestedPlayer = data;
 }
 
 Player Request::getRequstedPlayer()
 {
-	return requestedPlayer;
+	return *requestedPlayer;
 }
 
 void Request::setText(string data)
@@ -298,13 +298,13 @@ string Request::getStatus()
 	return value;
 }
 
-void Request::setSender(Team team)
+void Request::setSender(Team* team)
 {
 	this->sender = team;
 }
 Team Request::getSender()
 {
-	return sender;
+	return *sender;
 }
 
 ////// Request class functions end //////

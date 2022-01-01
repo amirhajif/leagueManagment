@@ -12,7 +12,7 @@ protected:
 	char firstName[30];
 	char lastName[30];
 public:
-	User() {}
+	User() { username[0] = '\0'; }
 	User(string, string, string, string);
 
 	void setUsername(string);
@@ -63,7 +63,7 @@ private:
 	double salary;
 	double stock;
 	int goals;
-	Request requestBox[30];
+	Request* requestBox;
 	int requestCounter;
 public:
 	Player();
@@ -128,7 +128,7 @@ class Coach :public User
 private:
 	Team team;
 public:
-	Coach() {}
+	Coach() { }
 	Coach(string, string, string, string, Team);
 
 	void setTeam(Team);
@@ -142,15 +142,15 @@ public:
 class Request
 {
 private:
-	Player requestedPlayer;
+	Player* requestedPlayer;
 	char text[100];
-	Team sender;
+	Team* sender;
 	char status[100];
 public:
-	Request() {}
-	Request(Team, string, Player, string);
+	Request() {  }
+	Request(Team*, string, Player*, string);
 
-	void setRequstedPlayer(Player);
+	void setRequstedPlayer(Player*);
 	Player getRequstedPlayer();
 
 	void setText(string);
@@ -159,7 +159,7 @@ public:
 	void setSatus(string);
 	string getStatus();
 
-	void setSender(Team);
+	void setSender(Team*);
 	Team getSender();
 };
 
