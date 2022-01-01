@@ -12,7 +12,7 @@ protected:
 	char firstName[30];
 	char lastName[30];
 public:
-	User() { username[0] = '\0'; }
+	User() { }
 	User(string, string, string, string);
 
 	void setUsername(string);

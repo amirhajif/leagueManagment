@@ -80,6 +80,7 @@ string Role::getRole()
 
 Player::Player()
 {
+	requestBox = new Request[30];
 	requestCounter = 0;
 }
 
@@ -87,6 +88,8 @@ Player::Player(string username, string password, string firstname, string lastna
 	string role, double salary, double stock, int goals)
 	:User(username, password, firstname, lastname)
 {
+	requestBox = new Request[30];
+
 	requestCounter = 0;
 
 	this->setRole(role);
