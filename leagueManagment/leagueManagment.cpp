@@ -32,6 +32,15 @@ bool isCoachUserNameExist(string userName,vector<Coach>& coaches)
 	return false;
 }
 
+//function for check player username not be duplicate
+bool isPluserNameExist(string userName, vector<Player>& players)
+{
+	for (int i = 0; i < players.size(); i++)
+		if (players[i].getUsername() == userName)
+			return true;
+	return false;
+}
+
 //function for sign up team manager
 void signUpTeamManager(vector<TeamManager>& teamManagers)
 {
@@ -159,8 +168,56 @@ void deleteCoach(vector<Coach>& coaches)
 	
 }
 
+//function for add new player
+void addPlayer(vector<Player>& players)
+{
+	string firstName, lastName, userName, password,role;
+	double salary, stock;
+	int goals;
+
+	cin.clear();
+	cin.ignore();
+
+	cout << "enter first name:\t";
+	getline(cin, firstName);
+
+	cout << "enter last name:\t";
+	getline(cin, lastName);
+	//check user name not be duplicated
+	while (true)
+	{
+		cout << "enter user name:\t";
+		getline(cin, userName);
+		if (!isPluserNameExist(userName, players))
+			break;
+		else
+			cout << "plz select another one it`s exist!!\n";
+	}
+	cout << "plz enter password:\t";
+	getline(cin, password);
+
+	cout << "plz enter player role:\t";
+	getline(cin, role);
+
+	cout << "plz enter player salary:\t";
+	cin >> salary;
+
+	cout << "plz enter player stock:\t";
+	cin >> stock;
+
+	cout << "plz enter player goals:\t";
+	cin >> goals;
+
+	Player player(userName, password, firstName, lastName,role, salary, stock, goals);
+	players.push_back(player);
+	ofstream file(playerFile,ios::binary | ios::app);
+	file.write(reinterpret_cast<char*>(&player), sizeof(Player));
+	file.close();
+
+}
+
 //function for  login and do activity team manager
-void logInTeamManager(vector<TeamManager>& teamManagers, vector<Team>& teams, vector<Coach>& coaches)
+void logInTeamManager(vector<TeamManager>& teamManagers, vector<Team>& teams, vector<Coach>& coaches, vector<Player>& players)
 {
 	cin.clear();
 	cin.ignore();
@@ -211,6 +268,7 @@ void logInTeamManager(vector<TeamManager>& teamManagers, vector<Team>& teams, ve
 		case 5:
 			break;
 		case 6:
+			addPlayer(players);
 			break;
 		case 7:
 			break;
@@ -222,7 +280,7 @@ void logInTeamManager(vector<TeamManager>& teamManagers, vector<Team>& teams, ve
 }
 
 //function for show team manager menu
-void teamManagerMenu(vector<TeamManager>& teamManagers, vector<Team>& teams, vector<Coach>& coaches)
+void teamManagerMenu(vector<TeamManager>& teamManagers, vector<Team>& teams, vector<Coach>& coaches, vector<Player>& players)
 {
 	cout << "1-logIn\n2-i`m new(sign up)\n3-exit\nenter option:\t";
 	int opt;
@@ -230,7 +288,7 @@ void teamManagerMenu(vector<TeamManager>& teamManagers, vector<Team>& teams, vec
 	switch (opt)
 	{
 	case 1:
-		logInTeamManager(teamManagers,teams,coaches);
+		logInTeamManager(teamManagers,teams,coaches,players);
 		break;
 	case 2:
 		signUpTeamManager(teamManagers);
@@ -243,6 +301,11 @@ void teamManagerMenu(vector<TeamManager>& teamManagers, vector<Team>& teams, vec
 
 }
 
+//function for sign in coach and do activity
+void logInCoach(vector<Team>& teams, vector<Coach>& coaches, vector<Player>& players)
+{
+	//not completed......
+}
 
 //function for show coach menu
 void coachMenu(vector<Team>& teams, vector<Coach>& coaches, vector<Player>& players)
@@ -253,7 +316,7 @@ void coachMenu(vector<Team>& teams, vector<Coach>& coaches, vector<Player>& play
 	switch (opt)
 	{
 	case 1:
-		
+		logInCoach(teams, coaches, players);
 		break;
 	case 2:
 		signUpCoach(coaches,teams);
@@ -309,7 +372,7 @@ int main()
 		switch (opt)
 		{
 			case 1:
-				teamManagerMenu(teamManagers,teams,coaches);
+				teamManagerMenu(teamManagers,teams,coaches,players);
 				break;
 			case 2:
 				coachMenu(teams,coaches,players);
