@@ -91,6 +91,7 @@ public:
 class Team
 {
 private:
+	char teamName[30];
 	char managerTeamName[30];
 	char coachName[30];
 	Player players[22];
@@ -100,8 +101,11 @@ private:
 	double budget;
 public:
 	Team();
-	Team(string, string);
+	Team(string, string,string);
 	bool haveCapacity();
+
+	void setTeamName(string);
+	string getTeamName();
 
 	void setManagerName(string);
 	string getManagerName();

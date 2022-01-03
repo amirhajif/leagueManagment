@@ -164,8 +164,9 @@ Team::Team()
 	playersCounter = 0;
 }
 
-Team::Team(string managerName, string coachName)
+Team::Team(string teamName,string managerName, string coachName)
 {
+	this->setTeamName(teamName);
 	this->setCoachName(coachName);
 	this->setManagerName(managerName);
 }
@@ -173,6 +174,16 @@ Team::Team(string managerName, string coachName)
 bool Team::haveCapacity()
 {
 	return playersCounter < 22;
+}
+
+void Team::setTeamName(string data)
+{
+	memcpy(this->teamName, data.c_str(), 30);
+}
+string Team::getTeamName()
+{
+	string value(teamName);
+	return value;
 }
 
 void Team::setManagerName(string data)
