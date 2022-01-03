@@ -216,6 +216,40 @@ void addPlayer(vector<Player>& players)
 
 }
 
+//function for update players file
+void updatePlayerFile(vector<Player>& players)
+{
+	ofstream file(playerFile, ios::binary);
+	file.clear();
+	for (int i = 0; i < players.size(); i++)
+	{
+		Player player = players[i];
+		file.write(reinterpret_cast<char*>(&player), sizeof(Player));
+	}
+	file.close();
+}
+
+//function for delete player
+void deletePlayer(vector<Player>& players)
+{
+	if (players.size() == 0)
+	{
+		cout << "no plater exist!!!!\n";
+		return;
+	}
+	cout << "players list select player want to edit\n";
+	for (int i = 0; i < players.size(); i++)
+	{
+		cout << i + 1 << "-  " << players[i].getUsername() << endl;
+	}
+	cout << "enter number:\t";
+	int opt;
+	cin >> opt;
+	players.erase(players.begin() + (opt-1));
+	updatePlayerFile(players);
+	cout << "player deleted\n";
+}
+
 //function for  login and do activity team manager
 void logInTeamManager(vector<TeamManager>& teamManagers, vector<Team>& teams, vector<Coach>& coaches, vector<Player>& players)
 {
@@ -271,6 +305,7 @@ void logInTeamManager(vector<TeamManager>& teamManagers, vector<Team>& teams, ve
 			addPlayer(players);
 			break;
 		case 7:
+			deletePlayer(players);
 			break;
 		default:
 			break;
