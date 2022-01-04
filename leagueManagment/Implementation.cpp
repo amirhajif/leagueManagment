@@ -161,11 +161,14 @@ Request Player::getRequest(int index)
 
 Team::Team()
 {
+	score = 0;
 	playersCounter = 0;
 }
 
 Team::Team(string teamName,string managerName, string coachName)
 {
+	score = 0;
+
 	this->setTeamName(teamName);
 	this->setCoachName(coachName);
 	this->setManagerName(managerName);
@@ -254,6 +257,11 @@ Coach::Coach(string username, string password, string firstname,
 	:User(username, password, firstname, lastname)
 {
 	this->setTeam(team);
+}
+Coach::Coach(string username, string password, string firstname,
+	string lastname) : User(username, password, firstname, lastname)
+{
+
 }
 
 void Coach::setTeam(Team team)
@@ -383,6 +391,8 @@ TeamManager::TeamManager()
 TeamManager::TeamManager(string username, string password,
 	string firstname, string lastname)
 {
+	role.setRole("team manager");
+
 	sendedRequestCounter = 0;
 	deliveredRequestCounter = 0;
 

@@ -134,6 +134,7 @@ private:
 public:
 	Coach() { }
 	Coach(string, string, string, string, Team);
+	Coach(string, string, string, string);
 
 	void setTeam(Team);
 	Team getTeam();
