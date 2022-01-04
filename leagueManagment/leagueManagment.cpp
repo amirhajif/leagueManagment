@@ -141,6 +141,11 @@ void updateCoachFile(vector<Coach>& coaches)
 //function for delete coach
 void deleteCoach(vector<Coach>& coaches)
 {
+	if (coaches.size() == 0)
+	{
+		cout << "no coach submited!!\n";
+		return;
+	}
 	cout << "plz enter username of coach:\t";
 	string userName;
 	getline(cin, userName);
@@ -278,7 +283,7 @@ void deleteTeam(vector<Team>& teams)
 	cin >> opt;
 	teams.erase(teams.begin() + (opt - 1));
 	updateTeamFile(teams);
-	cout << "player deleted\n";
+	cout << "team deleted\n";
 }
 
 //function for edit coach first name
@@ -318,19 +323,6 @@ void editCoachTeam(vector<Coach>& coaches, vector<Team>& teams, int index)
 	coaches[index].setTeam(teams[opt - 1]);
 }
 
-//function for update coach file
-void updateCoachFile(vector<Coach>& coaches)
-{
-	ofstream file(coachFile, ios::binary);
-	file.clear();
-	for (int i = 0; i < coaches.size(); i++)
-	{
-		Coach coach = coaches[i];
-		file.write(reinterpret_cast<char*>(&coach), sizeof(Coach));
-	}
-	file.close();
-}
-
 //function for edit coach
 void editCoach(vector<Coach>& coaches, vector<Team>& teams)
 {
@@ -354,13 +346,13 @@ void editCoach(vector<Coach>& coaches, vector<Team>& teams)
 	switch (opt)
 	{
 	case 1:
-		editCoachFirstName(coaches, index);
+		editCoachFirstName(coaches, index-1);
 		break;
 	case 2:
-		editCoachLastName(coaches, index);
+		editCoachLastName(coaches, index-1);
 		break;
 	case 3:
-		editCoachTeam(coaches, teams,index);
+		editCoachTeam(coaches, teams,index-1);
 		break;
 	default:
 		break;
@@ -369,7 +361,6 @@ void editCoach(vector<Coach>& coaches, vector<Team>& teams)
 
 
 }
-
 
 //function for  login and do activity team manager
 void logInTeamManager(vector<TeamManager>& teamManagers, vector<Team>& teams, vector<Coach>& coaches, vector<Player>& players)
@@ -452,8 +443,6 @@ void teamManagerMenu(vector<TeamManager>& teamManagers, vector<Team>& teams, vec
 	case 2:
 		signUpTeamManager(teamManagers);
 		break;
-	case 3:
-		break;
 	default:
 		break;
 	}
@@ -469,7 +458,7 @@ void logInCoach(vector<Team>& teams, vector<Coach>& coaches, vector<Player>& pla
 //function for show coach menu
 void coachMenu(vector<Team>& teams, vector<Coach>& coaches, vector<Player>& players)
 {
-	cout << "1-logIn\n2-i`m new(sign up)\n3-exit\nenter option:\t";
+	cout << "1-logIn\n2-i`m new(sign up)\nenter option:\t";
 	int opt;
 	cin >> opt;
 	switch (opt)
@@ -480,12 +469,146 @@ void coachMenu(vector<Team>& teams, vector<Coach>& coaches, vector<Player>& play
 	case 2:
 		signUpCoach(coaches,teams);
 		break;
-	case 3:
-		break;
 	default:
 		break;
 	}
 }
+
+//function for delete team manage file
+void updateTeamManagerFile(vector<TeamManager>& teamManagers)
+{
+	ofstream file(teamManagerFile, ios::binary);
+	file.clear();
+	for (int i = 0; i < teamManagers.size(); i++)
+	{
+		TeamManager teamManager = teamManagers[i];
+		file.write(reinterpret_cast<char*>(&teamManager), sizeof(TeamManager));
+	}
+	file.close();
+}
+
+//function for delete team manager
+void deleteTeamManager(vector<TeamManager>& teamManagers)
+{
+	if (teamManagers.size() == 0)
+	{
+		cout << "no team manager submited\n";
+		return;
+	}
+	cout << "team manager list select manager want to delete\n";
+	for (int i = 0; i < teamManagers.size(); i++)
+	{
+		cout << i + 1 << "-  " << teamManagers[i].getUsername() << endl;
+	}
+	cout << "enter number:\t";
+	int opt;
+	cin >> opt;
+	teamManagers.erase(teamManagers.begin() + (opt - 1));
+	updateTeamManagerFile(teamManagers);
+	cout << "team manager deleted\n";
+
+}
+
+//functio for edit team manager first name
+void editTeamManagerFirstName(vector<TeamManager>& teamManagers, int index)
+{
+	string name;
+	cout << "plz enter new name:\t";
+	cin.clear();
+	cin.ignore();
+	getline(cin, name);
+	teamManagers[index].setFirstName(name);
+}
+
+//function for edit team manager last name
+void editTeamManagerLastName(vector<TeamManager>& teamManagers, int index)
+{
+	string name;
+	cout << "plz enter new name:\t";
+	cin.clear();
+	cin.ignore();
+	getline(cin, name);
+	teamManagers[index].setLastName(name);
+}
+
+//function for edit team manager info
+void editTeamManager(vector<TeamManager>& teamManagers)
+{
+
+	if (teamManagers.size() == 0)
+	{
+		cout << "no team manager exist for edit!!\n";
+		return;
+	}
+
+	cout << "list of team managers userName:\n";
+	for (int i = 0; i < teamManagers.size(); i++)
+	{
+		cout << i + 1 << "- " << teamManagers[i].getUsername() << endl;
+	}
+
+	cout << "enter team manager number:\t";
+
+	int index;
+	cin >> index;
+	cout << "userName and password cant be changed\n1-firstName\n2-lastName\nselect item for edit:\t";
+	int opt;
+	cin >> opt;
+	switch (opt)
+	{
+	case 1:
+		editTeamManagerFirstName(teamManagers, index-1);
+		break;
+	case 2:
+		editTeamManagerLastName(teamManagers, index);
+		break;
+	default:
+		break;
+	}
+	updateTeamManagerFile(teamManagers);
+
+}
+
+//function for show league manager menu
+void leagueManagarMenu(vector<TeamManager>& teamManagers, vector<Team>& teams, vector<Coach>& coaches, vector<Player>& players)
+{
+	string userName, password;
+	cout << "plz enter user name:\t";
+	cin.clear();
+	cin.ignore();
+	getline(cin, userName);
+	cout << "plz enter password:\t";
+	getline(cin, password);
+
+	if (userName == "azizikhadem" && password == "1234")
+	{
+		cout << "1-start Game\n2-add team manager\n3-delete team manager\n4-edit team manager\nenter option:\t";
+		int opt;
+		cin >> opt;
+		switch (opt)
+		{
+		case 1:
+			//no written
+			break;
+		case 2:
+			signUpTeamManager(teamManagers);
+			break;
+		case 3:
+			deleteTeamManager(teamManagers);
+			break;
+		case 4:
+			editTeamManager(teamManagers);
+			break;
+		default:
+			break;
+		}
+	}
+	else
+		cout << "usernam/password input invalid\n";
+
+}
+
+
 int main()
 {
 	/*TeamManager* tm = new TeamManager();*/
@@ -537,6 +660,7 @@ int main()
 				coachMenu(teams,coaches,players);
 				break;
 			case 3:
+				leagueManagarMenu(teamManagers, teams, coaches, players);
 				break;
 			case 4:
 				break;
