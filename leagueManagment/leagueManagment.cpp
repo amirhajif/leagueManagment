@@ -117,6 +117,7 @@ int isTeamNameExist(string name,vector<Team>&const teams)
 
 	return -1;
 }
+
 TeamManager inputTeamManager(vector<TeamManager>teamManagers)
 {
 	string firstName, lastName, userName, password;
@@ -740,6 +741,42 @@ void leagueManagarMenu(vector<TeamManager>& teamManagers, vector<Team>& teams, v
 		cout << "usernam/password input invalid\n";
 
 }
+// A function to implement bubble sort 
+void playerSortBaseGoal(vector<Player>& players)
+{
+	int i, j;
+	for (i = 0; i < players.size() - 1; i++)
+	{
+		for (j = 0; j < players.size() - i - 1; j++)
+		{
+			if (players[j].getGoals() < players[j + 1].getGoals())
+			{
+				Player test = players[j];
+				players[j] = players[j + 1];
+				players[j + 1] = test;
+
+			}
+		}
+	}
+
+	//update binary file after sort
+	updatePlayerFile(players);
+}
+
+
+//function for show top player at league
+void topPlayersList(vector<Player>& players)
+{
+	//before show should be sorted
+	playerSortBaseGoal(players);
+
+	cout << "----------top player list--------\n";
+	for (int i = 0; i < players.size(); i++)
+	{
+		cout << players[i].getFirstName() << "\t" << players[i].getLastName() << "\t" << players[i].getGoals() << endl;
+	}
+}
+
 
 
 int main()
@@ -781,8 +818,8 @@ int main()
 
 	while (true)
 	{
-		cout << "1-teamManager menu\n2-Coach menu\n3-leagueManager\n" <<
-			"4-exit\nenter option:\t";
+		cout << "1-teamManager menu\n2-Coach menu\n3-leagueManager\n4-top player\n5-league table" <<
+			"6-exit\nenter option:\t";
 
 		int opt;
 		cin >> opt;
@@ -798,6 +835,8 @@ int main()
 				leagueManagarMenu(teamManagers, teams, coaches, players);
 				break;
 			case 4:
+				topPlayersList(players);
+			case 6:
 				exit(0);
 			default:
 				cout << "\ninvalid choose!\n\n";
