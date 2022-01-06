@@ -741,6 +741,7 @@ void leagueManagarMenu(vector<TeamManager>& teamManagers, vector<Team>& teams, v
 		cout << "usernam/password input invalid\n";
 
 }
+
 // A function to implement bubble sort 
 void playerSortBaseGoal(vector<Player>& players)
 {
@@ -763,7 +764,6 @@ void playerSortBaseGoal(vector<Player>& players)
 	updatePlayerFile(players);
 }
 
-
 //function for show top player at league
 void topPlayersList(vector<Player>& players)
 {
@@ -773,10 +773,46 @@ void topPlayersList(vector<Player>& players)
 	cout << "----------top player list--------\n";
 	for (int i = 0; i < players.size(); i++)
 	{
-		cout << players[i].getFirstName() << "\t" << players[i].getLastName() << "\t" << players[i].getGoals() << endl;
+		cout <<i+1<<"- " << players[i].getFirstName() << "\t" << players[i].getLastName() << "\t" << players[i].getGoals() << endl;
 	}
 }
 
+//function for sort teams of league base goals
+void teamsSortBaseScore(vector<Team>& teams)
+{
+	int i, j;
+	for (i = 0; i < teams.size() - 1; i++)
+	{
+		for (j = 0; j < teams.size() - i - 1; j++)
+		{
+			if (teams[j].getScore() < teams[j + 1].getScore())
+			{
+				Team test = teams[j];
+				teams[j] = teams[j + 1];
+				teams[j + 1] = test;
+
+			}
+		}
+	}
+
+	//update binary file after sort
+	updateTeamFile(teams);
+}
+
+
+//function for show leagueTable base score
+void showLeagueTable(vector<Team>& teams)
+{
+	//sort teames in table
+	teamsSortBaseScore(teams);
+
+	//show teams
+	for (int i = 0; i < teams.size(); i++)
+	{
+		cout << i + 1 << "- " << teams[i].getTeamName() << "\t" << teams[i].getScore() << endl;
+	}
+
+}
 
 
 int main()
@@ -836,6 +872,10 @@ int main()
 				break;
 			case 4:
 				topPlayersList(players);
+				break;
+			case 5:
+				showLeagueTable(teams);
+				break;
 			case 6:
 				exit(0);
 			default:
