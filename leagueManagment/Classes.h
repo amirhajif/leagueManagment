@@ -65,6 +65,7 @@ private:
 	int goals;
 	Request* requestBox;
 	int requestCounter;
+	string teamName;
 public:
 	Player();
 	Player(string, string, string, string, string, double, double, int);
@@ -82,6 +83,9 @@ public:
 
 	void addRequst(Request);
 	Request getRequest(int);
+
+	void setTeamName(string);
+	string getTeamName();
 };
 
 //////////// Player class end ////////////
@@ -103,6 +107,8 @@ public:
 	Team();
 	Team(string, string,string);
 	bool haveCapacity();
+
+	int getPlayerCount();
 
 	void setTeamName(string);
 	string getTeamName();

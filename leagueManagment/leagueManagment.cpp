@@ -320,7 +320,6 @@ void addPlayer(vector<Player>& players)
 {
 	string firstName, lastName, userName, password,role;
 	double salary, stock;
-	int goals;
 
 	cin.clear();
 	cin.ignore();
@@ -352,10 +351,7 @@ void addPlayer(vector<Player>& players)
 	cout << "plz enter player stock:\t";
 	cin >> stock;
 
-	cout << "plz enter player goals:\t";
-	cin >> goals;
-
-	Player player(userName, password, firstName, lastName,role, salary, stock, goals);
+	Player player(userName, password, firstName, lastName,role, salary, stock, 0);
 	players.push_back(player);
 	ofstream file(playerFile,ios::binary | ios::app);
 	file.write(reinterpret_cast<char*>(&player), sizeof(Player));
@@ -528,7 +524,7 @@ void logInTeamManager(vector<TeamManager>& teamManagers, vector<Team>& teams, ve
 	}
 	else
 	{
-		cout << "1-add coach\n2-delete coach\n3-edit coach\n4-request player\n5-delete team\n6-add player\n7-delete player\nselect option:\t";
+		cout << "1-add coach\n2-delete coach\n3-edit coach\n4-delete team\n5-add player\n6-delete player\nselect option:\t";
 		int opt;
 		cin >> opt;
 		switch (opt)
@@ -543,15 +539,12 @@ void logInTeamManager(vector<TeamManager>& teamManagers, vector<Team>& teams, ve
 				editCoach(coaches,teams);
 				break;
 			case 4:
-				//not written
-				break;
-			case 5:
 				deleteTeam(teams);
 				break;
-			case 6:
+			case 5:
 				addPlayer(players);
 				break;
-			case 7:
+			case 6:
 				deletePlayer(players);
 				break;
 			default:
@@ -583,10 +576,62 @@ void teamManagerMenu(vector<TeamManager>& teamManagers, vector<Team>& teams, vec
 
 }
 
+//fuction for check coach with user and pass exist or not
+int isCoachExist(string userName, string password, vector<Coach>& coaches)
+{
+	for (int i = 0; i < coaches.size(); i++)
+		if (coaches[i].getUsername() == userName && coaches[i].getPassword() == password)
+			return i;
+	return -1;
+}
+
 //function for sign in coach and do activity
 void logInCoach(vector<Team>& teams, vector<Coach>& coaches, vector<Player>& players)
 {
-	//not completed......
+	cin.clear();
+	cin.ignore();
+	string userName,password;
+	cout << "plz enter username:\t";
+	getline(cin, userName);
+
+	cout << "plz enter password:\t";
+	getline(cin, password);
+
+	int coachIndex = isCoachExist(userName, password, coaches);
+
+	if (coachIndex !=-1)
+	{
+		if (players.size() == 0)
+		{
+			cout << "we dont have player\n";
+			return;
+		}
+
+		//check team free space
+		for (int i = 0; i < teams.size(); i++)
+		{
+			if (teams[i].getTeamName() == coaches[coachIndex].getTeam().getTeamName())
+			{
+				cout << "count of player in team(maximum:22)-->\t" << teams[i].getPlayerCount()<<endl;
+			}
+		}
+
+		cout << "list of players(select free agent player)\n";
+		for (int i = 0; i < players.size(); i++)
+		{
+			cout << i + 1 << "- " << players[i].getFirstName() << "  " << players[i].getLastName() << "\t" << players[i].getTeamName() << endl;
+		}
+		int index;
+		cout << "plz enter player number:\t";
+		cin >> index;
+		players[index - 1].setTeamName(coaches[coachIndex].getTeam().getTeamName());
+		updatePlayerFile(players);
+	}
+	else
+	{
+		cout << "user/pass input invalid\n";
+	}
+
 }
 
 //function for show coach menu
@@ -767,6 +812,12 @@ void playerSortBaseGoal(vector<Player>& players)
 //function for show top player at league
 void topPlayersList(vector<Player>& players)
 {
+
+	if (players.size() == 0)
+	{
+		cout << "no player submited!!\n";
+		return;
+	}
 	//before show should be sorted
 	playerSortBaseGoal(players);
 
@@ -799,10 +850,14 @@ void teamsSortBaseScore(vector<Team>& teams)
 	updateTeamFile(teams);
 }
 
-
 //function for show leagueTable base score
 void showLeagueTable(vector<Team>& teams)
 {
+	if (teams.size() == 0)
+	{
+		cout << "no team submited!!\n";
+		return;
+	}
 	//sort teames in table
 	teamsSortBaseScore(teams);
 
@@ -854,7 +909,7 @@ int main()
 
 	while (true)
 	{
-		cout << "1-teamManager menu\n2-Coach menu\n3-leagueManager\n4-top player\n5-league table" <<
+		cout << "1-teamManager menu\n2-Coach menu\n3-leagueManager\n4-top player\n5-league table\n" <<
 			"6-exit\nenter option:\t";
 
 		int opt;

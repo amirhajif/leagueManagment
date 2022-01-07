@@ -82,6 +82,7 @@ Player::Player()
 {
 	requestBox = new Request[30];
 	requestCounter = 0;
+	teamName = "Free Agent";
 }
 
 Player::Player(string username, string password, string firstname, string lastname,
@@ -91,6 +92,8 @@ Player::Player(string username, string password, string firstname, string lastna
 	requestBox = new Request[30];
 
 	requestCounter = 0;
+
+	teamName = "Free Agent";
 
 	this->setRole(role);
 	this->setGoals(goals);
@@ -153,6 +156,15 @@ void Player::addRequst(Request request)
 Request Player::getRequest(int index)
 {
 	return requestBox[index];
+}
+
+void Player::setTeamName(string teamName)
+{
+	this->teamName = teamName;
+}
+string Player::getTeamName()
+{
+	return this->teamName;
 }
 
 ////// Player class functions end //////
@@ -246,6 +258,11 @@ void Team::setBudget(double data)
 double Team::getBudget()
 {
 	return budget;
+}
+
+int Team::getPlayerCount()
+{
+	return this->playersCounter;
 }
 
 ////// Team class functions end //////
