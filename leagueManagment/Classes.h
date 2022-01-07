@@ -86,6 +86,8 @@ public:
 
 	void setTeamName(string);
 	string getTeamName();
+
+	void increaseGoal(int);
 };
 
 //////////// Player class end ////////////
@@ -127,6 +129,8 @@ public:
 
 	void setBudget(double);
 	double getBudget();
+
+	void increaseScore(int);
 };
 
 //////////// Team class end ////////////

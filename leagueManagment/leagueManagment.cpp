@@ -13,7 +13,7 @@ string requestFile = "request.dat";
 
 using namespace std;
 
-
+//function for find coach with team name
 int findCoachByTeamName(vector<Coach>&coaches, string teamName)
 {
 	int size = coaches.size();
@@ -52,6 +52,7 @@ void updateTeamManagerFile(vector<TeamManager>& teamManagers)
 	file.close();
 }
 
+//function for find team by team manager
 int findTeamByTeamManager(vector<Team>& const teams, string name)
 {
 	int size = teams.size();
@@ -62,6 +63,7 @@ int findTeamByTeamManager(vector<Team>& const teams, string name)
 	}
 	return -1;
 }
+
 //function for check the file is empty or not
 bool isFileEmpty(string);
 
@@ -747,6 +749,75 @@ void editTeamManager(vector<TeamManager>& teamManagers)
 
 }
 
+//function for set team play random
+void buildTeamIndexRandom(int& indexTeamOne,int& indexTeamTwo,int size)
+{
+	srand(time(0));
+	while (true)
+	{
+		indexTeamOne = rand() % size;
+		indexTeamTwo = rand() % size;
+		if (indexTeamOne != indexTeamTwo)
+			break;
+	}
+}
+
+//function for set teams goal and player goal
+void setTeamsAndPlayersGoal(int& goalTeamOne, int& goalTeamTwo,Player playerTeam1,Player playerTeam2, vector<Player>& players)
+{
+	srand(time(0));
+	goalTeamOne = rand() % 5;
+	goalTeamTwo = rand() % 5;
+
+	for (int i = 0; i < players.size(); i++)
+	{
+		if (players[i].getUsername() == playerTeam1.getUsername())
+			players[i].increaseGoal(goalTeamOne);
+		if (players[i].getUsername() == playerTeam2.getUsername())
+			players[i].increaseGoal(goalTeamTwo);
+	}
+
+}
+
+//function for start match 
+void startGame(vector<Team>& teams, vector<Player>& players)
+{
+	//check each team have 5 player atleast
+	for (int i = 0; i < teams.size(); i++)
+	{
+		if (teams[i].getPlayerCount() < 5)
+		{
+			cout << "sorry team " << teams[i].getTeamName() << " dosn`t have minimum of player\n";
+			return;
+		}
+	}
+	//tedad hafte haye ma yeki kamtar az tedad team hast
+	for (int i = 0; i < teams.size() - 1; i++)
+	{
+		cout << "\n                  WEEK " << i + 1 << " Game\n";
+		int indexTeamOne, indexTeamTwo,goalTeamOne,goalTeamTwo;
+		buildTeamIndexRandom(indexTeamOne, indexTeamTwo, teams.size());
+		setTeamsAndPlayersGoal(goalTeamOne, goalTeamTwo,teams[indexTeamOne].getPlayer(2),teams[indexTeamTwo].getPlayer(3),players);
+		
+		cout << "MATCH:\t" << teams[indexTeamOne].getTeamName() << " " << goalTeamOne;
+		cout << "  -  " << goalTeamTwo << " " << teams[indexTeamTwo].getTeamName() << endl;
+		
+		if (goalTeamOne > goalTeamTwo)
+			teams[indexTeamOne].increaseScore(3);
+		else if(goalTeamOne < goalTeamTwo)
+			teams[indexTeamTwo].increaseScore(3);
+		else
+		{
+			teams[indexTeamOne].increaseScore(1);
+			teams[indexTeamTwo].increaseScore(1);
+		}
+		updatePlayerFile(players);
+		updateTeamFile(teams);
+	}
+
+}
+
+
 //function for show league manager menu
 void leagueManagarMenu(vector<TeamManager>& teamManagers, vector<Team>& teams, vector<Coach>& coaches, vector<Player>& players)
 {
@@ -766,7 +837,7 @@ void leagueManagarMenu(vector<TeamManager>& teamManagers, vector<Team>& teams, v
 		switch (opt)
 		{
 			case 1:
-				//no written
+				startGame(teams, players);
 				break;
 			case 2:
 				signUpTeamManager(teamManagers,teams,coaches);

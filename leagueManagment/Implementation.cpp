@@ -167,6 +167,11 @@ string Player::getTeamName()
 	return this->teamName;
 }
 
+void Player::increaseGoal(int value) 
+{
+	this->goals += value;
+}
+
 ////// Player class functions end //////
 
 ////// Team  class functions //////
@@ -264,6 +269,12 @@ int Team::getPlayerCount()
 {
 	return this->playersCounter;
 }
+
+void Team::increaseScore(int value)
+{
+	this->score += value;
+}
+
 
 ////// Team class functions end //////
 
