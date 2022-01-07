@@ -943,27 +943,6 @@ void showLeagueTable(vector<Team>& teams)
 
 int main()
 {
-	/*TeamManager* tm = new TeamManager();*/
-
-	//moshkel aval ke bod:
-	//2 field of request class should be pointer
-	//if want to change this two fiedl use new operator
-
-	//moshkel dovom:
-	//vaghti file binary ro misakhti va mikhasti baraye bare dovom run begiri
-	//on file khali bod va khataye memory access violation midad
-
-	/*Team* team = new Team("manager1", "coach1");
-	Player* player = new Player
-		(
-		"username", "password", "firstname",
-		"lastname", "goalie", 120, 450, 0
-		);
-
-	Request r(team, "some thing", player, "agrumentring");*/
-	//cout << r.getRequstedPlayer().getFirstName();
-
-	
 	//vectors
 	vector <LeagueManager> leagueManagers;
 	vector <TeamManager>teamManagers;
